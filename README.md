@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# Frontend React Test Task
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Цей проєкт є інтерактивною таблицею, створеною як тестове завдання для демонстрації навичок роботи з React та TypeScript.
+[**Жива демонстрація**](https://igornevil.github.io/interactive-table-app/)
 
-Currently, two official plugins are available:
+## Технічні вимоги
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Стек:** TypeScript, React, React Context, Sass.
+- **Обмеження:** Заборонено використовувати Redux (та Redux Toolkit), styled-components, готові UI бібліотеки та CSS-in-JS.
+- **Деплой:** Робоча версія програми розміщена на GitHub Pages.
 
-## React Compiler
+## Аргументи
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Програма приймає від користувача три числові значення:
 
-## Expanding the ESLint configuration
+- `M`: Кількість рядків (від 0 до 100).
+- `N`: Кількість стовпців (від 0 до 100).
+- `X`: Кількість найближчих за значенням комірок для підсвічування.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Структура даних
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Кожна комірка в матриці представлена об'єктом з наступною структурою:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```typescript
+type Cell = {
+  id: number; // Унікальний ідентифікатор
+  amount: number; // Випадкове тризначне число
+  row: number; // Індекс рядка
+  col: number; // Індекс стовпця
+};
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# Функціональність
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Відображення даних
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Згенерована матриця M x N відображається у вигляді таблиці.
+- Кожна комірка містить згенероване значення amount.
+- Додатковий стовпець праворуч показує суму значень для кожного рядка.
+- Додатковий рядок знизу показує 60-й перцентиль для кожного стовпця.
+
+## Збільшення значення в комірці
+
+- При натисканні на будь-яку комірку її значення amount збільшується на 1.
+- Суми та перцентилі автоматично перераховуються.
+
+## Пошук найближчих значень
+
+- При наведенні курсора на комірку, X комірок з найближчими значеннями amount підсвічуються синьою тепловою картою.
+- Інтенсивність кольору залежить від близькості значення: чим менша різниця, тим насиченіший синій колір.
+
+## Відображення відсотків та теплова карта рядка
+
+### При наведенні курсора на комірку з сумою рядка:
+
+- Значення в кожній комірці цього рядка замінюються на відсоток від загальної суми в рядку.
+- Рядок підсвічується жовто-оранжевою тепловою картою, де інтенсивність кольору відображає внесок комірки в загальну суму.
+
+## Додавання та видалення рядків
+
+- Додавання: Кнопка "Додати рядок" додає новий рядок в кінець таблиці, заповнений випадковими значеннями.
+- Видалення: Кожен рядок має кнопку "Видалити", яка видаляє його з таблиці.
+- Усі залежні значення (суми, перцентилі) автоматично перераховуються.
