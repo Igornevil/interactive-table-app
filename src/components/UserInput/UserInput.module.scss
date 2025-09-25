@@ -1,0 +1,33 @@
+.userInputContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.inputForm {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-weight: bold;
+  }
+
+  input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+}
+
+.xInputGroup {
+  display: flex;
+  flex-direction: column;
+}

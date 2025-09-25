@@ -1,0 +1,33 @@
+@use "sass:color";
+
+.matrixCell {
+  padding: 8px 12px;
+  border: 1px solid $light-gray;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform 0.1s ease-in-out,
+    box-shadow 0.1s ease-in-out;
+  user-select: none;
+  min-width: 80px;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    position: relative;
+  }
+}
+
+@for $i from 0 through 100 {
+  .heatmap-yellow-#{$i} {
+    background-color: color.mix($yellow-light, $orange-dark, $i * 1%);
+  }
+}
+
+@for $i from 0 through 100 {
+  .heatmap-blue-#{$i} {
+    background-color: color.mix($blue-light, $blue-dark, $i * 1%);
+    font-weight: bold;
+  }
+}

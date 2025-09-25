@@ -1,0 +1,43 @@
+.tableContainer {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #fff;
+  background-color: $background-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.addButton {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid $light-gray;
+  padding: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+th {
+  background-color: $background-color;
+  font-weight: 600;
+}
+
+.sumCell,
+.emptyCell,
+.percentileHeader {
+  font-weight: bold;
+}
