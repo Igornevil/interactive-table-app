@@ -79,7 +79,7 @@ export const MatrixProvider: React.FC<MatrixProviderProps> = ({ children }) => {
   // Обчислення X найближчих комірок до наведеної для теплової карти
   const nearestCellIds = useMemo(() => {
     const nearestMap = new Map<CellId, number>();
-    if (X === 0 || !hoveredCellId || allCells.length <= 1) {
+    if (X === 0 || hoveredCellId === null || allCells.length <= 1) {
       return nearestMap;
     }
     const hoveredCell = allCells.find((cell) => cell.id === hoveredCellId);
@@ -100,10 +100,13 @@ export const MatrixProvider: React.FC<MatrixProviderProps> = ({ children }) => {
     const maxDiff = nearest[nearest.length - 1].diff;
     const diffRange = maxDiff - minDiff;
 
+    const MIN_INTENSITY = 30;
+
     nearest.forEach(({ id, diff }) => {
       let intensity = 100;
       if (diffRange > 0) {
-        intensity = 100 - Math.round(((diff - minDiff) / diffRange) * 100);
+        const scaledDiff = (diff - minDiff) / diffRange;
+        intensity = 100 - Math.round(scaledDiff * (100 - MIN_INTENSITY));
       }
       nearestMap.set(id, intensity);
     });
