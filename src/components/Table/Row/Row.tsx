@@ -23,11 +23,6 @@ const Row: React.FC<RowProps> = ({ row, rowIndex }) => {
     [row]
   );
 
-  const maxInRow = useMemo(
-    () => (isHovered ? Math.max(...row.map((c) => c.amount)) : null),
-    [isHovered, row]
-  );
-
   return (
     <tr>
       <td className={styles.rowHeader}>Рядок {rowIndex + 1}</td>
@@ -36,7 +31,7 @@ const Row: React.FC<RowProps> = ({ row, rowIndex }) => {
           key={cell.id}
           cell={cell}
           isPercentView={isHovered}
-          maxInRow={maxInRow}
+          sumInRow={isHovered ? totalSum : null}
         />
       ))}
       <td

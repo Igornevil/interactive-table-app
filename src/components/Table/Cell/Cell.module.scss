@@ -21,13 +21,13 @@
 
 @for $i from 0 through 100 {
   .heatmap-yellow-#{$i} {
-    background-color: color.mix($yellow-light, $orange-dark, $i * 1%);
+    background-color: color.mix($yellow-light, $orange-dark, (100 - ($i * 1%)));
   }
 }
 
 @for $i from 0 through 100 {
   .heatmap-blue-#{$i} {
-    background-color: color.mix($blue-light, $blue-dark, $i * 1%);
+    background-color: color.mix($blue-light, $blue-dark, (100 - ($i * 1%)));
     font-weight: bold;
   }
 }

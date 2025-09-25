@@ -7,35 +7,52 @@ import styles from "./Cell.module.scss";
 interface CellProps {
   cell: CellType;
   isPercentView: boolean;
-  maxInRow: number | null;
+  sumInRow: number | null;
 }
 
-const Cell: React.FC<CellProps> = ({ cell, isPercentView, maxInRow }) => {
+const Cell: React.FC<CellProps> = ({ cell, isPercentView, sumInRow }) => {
+  // Отримуємо необхідні функції та дані з глобального контексту.
   const { incrementCellValue, setHoveredCellId, nearestCellIds } =
     useContext(MatrixContext);
 
+  // Визначаємо, чи є поточна комірка однією з найближчих за значенням.
   const nearestIntensity = nearestCellIds.get(cell.id);
   const isNearest = nearestIntensity !== undefined;
 
+  // Обчислюємо значення для відображення: або відсоток від суми, або абсолютне значення.
   const displayedValue = useMemo(() => {
-    if (isPercentView && maxInRow) {
-      const percentage = maxInRow > 0 ? (cell.amount / maxInRow) * 100 : 0;
+    if (isPercentView && sumInRow !== null && sumInRow > 0) {
+      const percentage = (cell.amount / sumInRow) * 100;
       return `${percentage.toFixed(0)}%`;
     }
     return cell.amount;
-  }, [isPercentView, cell.amount, maxInRow]);
+  }, [isPercentView, cell.amount, sumInRow]);
 
+  // Обчислюємо "сиру" інтенсивність кольору у відсотках (0-100).
   const percentIntensity = useMemo(() => {
-    if (isPercentView && maxInRow && maxInRow > 0) {
-      return Math.round((cell.amount / maxInRow) * 100);
+    if (isPercentView && sumInRow !== null && sumInRow > 0) {
+      return Math.round((cell.amount / sumInRow) * 100);
     }
     return null;
-  }, [isPercentView, cell.amount, maxInRow]);
+  }, [isPercentView, cell.amount, sumInRow]);
 
+  // Застосовуємо нелінійну функцію для візуального посилення градієнта.
+  const easedPercentIntensity = useMemo(() => {
+    if (percentIntensity === null) {
+      return null;
+    }
+    const normalized = percentIntensity / 100;
+    const eased = 1 - Math.pow(1 - normalized, 5);
+    return Math.round(eased * 100);
+  }, [percentIntensity]);
+
+  // Динамічно формуємо рядок з CSS-класами для стилізації.
   const tdClassName = classNames(styles.matrixCell, {
+    // Клас для синьої теплової карти (найближчі X).
     [styles[`heatmap-blue-${nearestIntensity}`]]: isNearest,
-    [styles[`heatmap-yellow-${percentIntensity}`]]:
-      !isNearest && isPercentView && percentIntensity !== null,
+    // Клас для жовтої теплової карти (відсотки), застосовується, якщо синя не активна.
+    [styles[`heatmap-yellow-${easedPercentIntensity}`]]:
+      !isNearest && isPercentView && easedPercentIntensity !== null,
   });
 
   return (
